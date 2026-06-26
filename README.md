@@ -52,7 +52,7 @@ Week1.py  (entry point & chat loop)
 ### 2. Clone the repository
 
 ```bash
-git clone https://github.com/24WH1A0586/STATIFY_2.0_<YourTeamName>.git
+git clone https://github.com/24WH1A0586/STATIFY_2.0_Rangers.git
 cd STATIFY_2.0_Rangers
 ```
 
