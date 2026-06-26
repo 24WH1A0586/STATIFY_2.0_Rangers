@@ -1,151 +1,142 @@
-# 📊 Statify 2.0 — GenAI Financial Analyst Chatbot
+# 📊 STATIFY 2.0 — AI Financial Analyst Chatbot
 
-> **Week 1 Project** | Statify 2.0 Programme
+**Team Name:** Rangers
 
-## 🧠 What It Does
+**Team Members:**
 
-Statify is an LLM-powered financial analyst chatbot that:
-- Retrieves **live stock prices** and key metrics (price, P/E, market cap, 52-week range) via **yfinance**.
-- Aggregates **latest financial news** and market sentiment via **DuckDuckGo Search**.
-- Uses a **Hugging Face open-source LLM** (Mistral-7B-Instruct by default) to reason over tool outputs and deliver conversational, data-backed answers.
+* CH. Charvi
+* V. Sai Dhathri
 
 ---
 
-## 🏗️ Architecture Overview
+# Overview
 
-```
-Week1.py  (entry point & chat loop)
-    │
-    ├── Loads .env (HF_TOKEN, HF_MODEL_ID)
-    ├── Initialises HuggingFaceEndpoint LLM
-    ├── Builds a ReAct Agent (LangChain create_react_agent)
-    │       │
-    │       ├── tool.py ──► get_stock_price(ticker)
-    │       │                   └─ yfinance.Ticker → StockPriceOutput (schema.py)
-    │       │
-    │       └── tool.py ──► search_news(query, max_results)
-    │                           └─ DuckDuckGo DDGS.news() → NewsSearchOutput (schema.py)
-    │
-    └── AgentExecutor runs the Reason → Act → Observe loop
-            └─ Returns Final Answer to the CLI chat loop
-```
-
-### File Responsibilities
-
-| File | Responsibility |
-|------|---------------|
-| `Week1.py` | App entry point. Loads env, builds the ReAct agent, runs the CLI chat loop. |
-| `tool.py` | All LangChain `@tool` definitions — stock price fetcher and news searcher. |
-| `schema.py` | Pydantic models for tool inputs/outputs and the top-level `AgentResponse`. |
-| `.env.example` | Template for required environment variables. |
-| `requirements.txt` | Python dependency list. |
+Statify 2.0 is an LLM-powered financial analyst chatbot that provides real-time stock prices and live market news for any company. Users interact with the chatbot through a conversational Command-Line Interface (CLI), allowing them to retrieve financial insights using natural language.
 
 ---
 
-## ⚙️ Setup & Running Locally
+# Architecture
 
-### 1. Prerequisites
-
-- Python **3.10+**
-- A free [Hugging Face account](https://huggingface.co/join) with an API token that has **Inference API** access.
-
-### 2. Clone the repository
-
-```bash
-git clone https://github.com/24WH1A0586/STATIFY_2.0_Rangers.git
-cd STATIFY_2.0_Rangers
+```text
+                    User
+                      │
+                      ▼
+                 Week1.py
+                      │
+                      ▼
+        LLM (Meta Llama 3.3 70B via Groq)
+                      │
+                      ▼
+          ReAct Agent (LangChain)
+             /                 \
+            ▼                   ▼
+   get_stock_price         search_news
+      (yfinance)         (DuckDuckGo Search)
+             \                 /
+              └──── schema.py ────┘
+             (Pydantic Validation)
 ```
 
-### 3. Create and activate a virtual environment
+**Week1.py** is the entry point of the application. It initializes the LLM, connects it with the available tools, and starts the interactive chatbot.
+
+**tool.py** defines two LangChain-compatible tools:
+
+* **get_stock_price** — Retrieves real-time stock prices and financial metrics using **yfinance**.
+* **search_news** — Fetches the latest financial news using **DuckDuckGo Search**.
+
+**schema.py** contains the Pydantic models used for validating the inputs and outputs of both tools, ensuring structured and type-safe data throughout the application.
+
+The chatbot follows the **ReAct (Reason + Act)** paradigm. It reasons about the user's query, decides which tool(s) to invoke, observes the retrieved information, and generates a final natural-language response.
+
+> **Note on LLM:** The problem statement requires an open-source Hugging Face model. Our implementation uses **Meta Llama 3.3 70B Instruct**, an open-source model, with inference served through the **Groq API**. This provides a reliable inference endpoint while preserving the use of the required open-source model.
+
+---
+
+# Setup Instructions
+
+## 1. Clone the Repository
 
 ```bash
-python -m venv venv
-# macOS / Linux
-source venv/bin/activate
-# Windows
-venv\Scripts\activate
+git clone https://github.com/your-username/STATIFY_2.0_Rangers-1.git
+cd STATIFY_2.0_Rangers-1
 ```
 
-### 4. Install dependencies
+> Replace the repository URL above with your actual GitHub repository link.
+
+---
+
+## 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure environment variables
+---
+
+## 3. Configure Environment Variables
+
+Copy the example environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and fill in your values:
+Open the `.env` file and add your API keys:
 
+```env
+HF_TOKEN=your_huggingface_token_here
+GROQ_API_KEY=your_groq_api_key_here
 ```
-HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-# Optional — change the model if desired
-HF_MODEL_ID=mistralai/Mistral-7B-Instruct-v0.3
-```
 
-> ⚠️ **Never commit your `.env` file.** It is already listed in `.gitignore`.
+* **HF_TOKEN:** Obtain a free Hugging Face access token from https://huggingface.co/settings/tokens
+* **GROQ_API_KEY:** Obtain a free Groq API key from https://console.groq.com
 
-### 6. Run the chatbot
+> **Important:** Never commit your `.env` file. It is already included in `.gitignore`.
+
+---
+
+## 4. Run the Chatbot
 
 ```bash
-python Week1.py
-```
-
-You should see:
-
-```
-⏳  Loading model: mistralai/Mistral-7B-Instruct-v0.3 …
-✅  Statify Financial Analyst is ready!
-
-╔══════════════════════════════════════════════════════╗
-║   📊  STATIFY 2.0 — AI Financial Analyst Chatbot     ║
-╚══════════════════════════════════════════════════════╝
-
-You:
+python3 Week1.py
 ```
 
 ---
 
-## 💬 Example Queries
+# Example Queries
 
+* What is the current stock price of Apple?
+* Show me the latest news about Tesla.
+* Give me a full analysis of Microsoft (MSFT).
+* What is NVIDIA's P/E ratio and 52-week range?
+* Summarize the latest market news for Amazon.
+
+---
+
+# Tech Stack
+
+| Component            | Technology                                 |
+| -------------------- | ------------------------------------------ |
+| LLM                  | Meta Llama 3.3 70B Instruct (via Groq API) |
+| Agent Framework      | LangChain ReAct                            |
+| Stock Data           | yfinance                                   |
+| News Search          | DuckDuckGo Search                          |
+| Data Validation      | Pydantic                                   |
+| Programming Language | Python                                     |
+| User Interface       | Command-Line Interface (CLI)               |
+
+---
+
+# Project Structure
+
+```text
+STATIFY_2.0_Rangers/
+│
+├── Week1.py             # Main chatbot application
+├── tool.py              # Financial tools
+├── schema.py            # Pydantic schemas
+├── requirements.txt     # Python dependencies
+├── .env.example         # Environment variable template
+├── .gitignore
+└── README.md
 ```
-What is the current price of Apple stock?
-Give me the latest news about Tesla.
-Analyse Microsoft — price, valuation, and any recent headlines.
-What is NVIDIA's P/E ratio and 52-week range?
-```
-
----
-
-## 🔑 Supported Environment Variables
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `HF_TOKEN` | ✅ Yes | — | Your Hugging Face API token |
-| `HF_MODEL_ID` | No | `mistralai/Mistral-7B-Instruct-v0.3` | HF model to use as the LLM engine |
-
----
-
-## 📦 Key Dependencies
-
-| Package | Purpose |
-|---------|---------|
-| `langchain` | Agent orchestration & ReAct framework |
-| `langchain-huggingface` | HuggingFaceEndpoint LLM wrapper |
-| `huggingface-hub` | Model access via Inference API |
-| `yfinance` | Real-time stock data |
-| `duckduckgo-search` | Live news aggregation |
-| `pydantic` | Schema validation |
-| `python-dotenv` | `.env` file loading |
-
----
-
-## 🛡️ Security Notes
-
-- API keys live only in your local `.env` file which is git-ignored.
-- The `.env.example` shows only placeholder values — safe to commit.
-- yfinance makes unauthenticated public requests; no key required.
-- DuckDuckGo search requires no API key.
