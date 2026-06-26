@@ -52,8 +52,8 @@ Week1.py  (entry point & chat loop)
 ### 2. Clone the repository
 
 ```bash
-git clone https://github.com/<your-org>/STATIFY_2.0_<YourTeamName>.git
-cd STATIFY_2.0_<YourTeamName>
+git clone https://github.com/24WH1A0586/STATIFY_2.0_<YourTeamName>.git
+cd STATIFY_2.0_Rangers
 ```
 
 ### 3. Create and activate a virtual environment
@@ -101,7 +101,7 @@ You should see:
 ✅  Statify Financial Analyst is ready!
 
 ╔══════════════════════════════════════════════════════╗
-║   📊  STATIFY 2.0 — AI Financial Analyst Chatbot    ║
+║   📊  STATIFY 2.0 — AI Financial Analyst Chatbot     ║
 ╚══════════════════════════════════════════════════════╝
 
 You:
