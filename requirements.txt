@@ -1,0 +1,23 @@
+# Core LLM & Agent framework
+langchain>=0.2.0
+langchain-huggingface>=0.0.6
+langchain-community>=0.2.0
+langchain-core>=0.2.0
+
+# Hugging Face
+huggingface-hub>=0.23.0
+
+# Stock data
+yfinance>=0.2.40
+
+# News search
+duckduckgo-search>=6.1.0
+
+# Schema validation
+pydantic>=2.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Optional: better terminal output
+rich>=13.0.0
