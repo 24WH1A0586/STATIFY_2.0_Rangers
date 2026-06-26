@@ -2,17 +2,6 @@
 
 > **Week 1 Project** | Statify 2.0 Programme
 
----
-
-## 👥 Team
-
-| Name | Role |
-|------|------|
-| *(Add your name)* | *(Add your role)* |
-| *(Add your name)* | *(Add your role)* |
-
----
-
 ## 🧠 What It Does
 
 Statify is an LLM-powered financial analyst chatbot that:
