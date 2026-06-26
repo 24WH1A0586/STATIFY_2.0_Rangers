@@ -8,7 +8,8 @@ Tools:
 
 import json
 import yfinance as yf
-from duckduckgo_search import DDGS
+#from duckduckgo_search import DDGS
+from ddgs import DDGS
 from langchain.tools import tool
 
 from schema import (
